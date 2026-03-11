@@ -95,3 +95,67 @@ def update_student(conn):
         print(f"Student ID {student_id} updated successfully!")
     except sqlite3.Error as e:
         print(f"Database error: {e}")
+
+# Delete student
+def delete_student(conn):
+    """Delete a student record from the database."""
+    view_students(conn)
+
+    try:
+        student_id = int(input("Enter the ID of the student to delete: "))
+    except ValueError:
+        print("Invalid ID. Please enter a number.")
+        return
+
+    confirm = input(f"Are you sure you want to delete student ID {student_id}? (yes/no): ").strip().lower()
+
+    if confirm != "yes":
+        print("Deletion cancelled.")
+        return
+
+    try:
+        cursor = conn.cursor()
+        cursor.execute("DELETE FROM students WHERE id = ?", (student_id,))
+        conn.commit()
+
+        if cursor.rowcount == 0:
+            print(f"No student found with ID {student_id}.")
+        else:
+            print(f"Student ID {student_id} deleted successfully!")
+    except sqlite3.Error as e:
+        print(f"Database error: {e}")
+# ---------- Main Menu ----------
+
+def main_menu():
+    """Display the main menu and handle user navigation."""
+    conn = connect_db()
+
+    while True:
+        print("\n===== Student Record Manager =====")
+        print("1. Add a new student record")
+        print("2. View all student records")
+        print("3. Update a student record")
+        print("4. Delete a student record")
+        print("5. Exit")
+        print("==================================")
+
+        choice = input("Enter your choice (1-5): ").strip()
+
+        if choice == "1":
+            add_student(conn)
+        elif choice == "2":
+            view_students(conn)
+        elif choice == "3":
+            update_student(conn)
+        elif choice == "4":
+            delete_student(conn)
+        elif choice == "5":
+            print("Goodbye!")
+            conn.close()
+            break
+        else:
+            print("Invalid choice. Please enter a number between 1 and 5.")
+
+# Run Program
+if __name__ == "__main__":
+    main_menu()
