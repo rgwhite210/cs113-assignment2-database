@@ -42,3 +42,21 @@ def add_student(conn):
         print(f"Student '{name}' added successfully!")
     except sqlite3.Error as e:
         print(f"Database error: {e}")
+
+# View students
+def view_students(conn):
+    """Retrieve and display all student records from the database."""
+    try:
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM students")
+        students = cursor.fetchall()
+
+        if not students:
+            print("No student records found.")
+        else:
+            print("\n--- Student Records ---")
+            for student in students:
+                print(f"ID: {student[0]} | Name: {student[1]} | Grade: {student[2]} | Email: {student[3]}")
+            print("-----------------------\n")
+    except sqlite3.Error as e:
+        print(f"Database error: {e}")
