@@ -60,3 +60,38 @@ def view_students(conn):
             print("-----------------------\n")
     except sqlite3.Error as e:
         print(f"Database error: {e}")
+
+# Update student
+def update_student(conn):
+    """Update an existing student record in the database."""
+    view_students(conn)
+
+    try:
+        student_id = int(input("Enter the ID of the student to update: "))
+    except ValueError:
+        print("Invalid ID. Please enter a number.")
+        return
+
+    name = input("Enter new name (leave blank to keep current): ").strip()
+    grade = input("Enter new grade (leave blank to keep current): ").strip()
+    email = input("Enter new email (leave blank to keep current): ").strip()
+
+    # Validate email if provided
+    if email and "@" not in email:
+        print("Invalid email. Must contain '@'.")
+        return
+
+    try:
+        cursor = conn.cursor()
+
+        if name:
+            cursor.execute("UPDATE students SET name = ? WHERE id = ?", (name, student_id))
+        if grade:
+            cursor.execute("UPDATE students SET grade = ? WHERE id = ?", (grade, student_id))
+        if email:
+            cursor.execute("UPDATE students SET email = ? WHERE id = ?", (email, student_id))
+
+        conn.commit()
+        print(f"Student ID {student_id} updated successfully!")
+    except sqlite3.Error as e:
+        print(f"Database error: {e}")
