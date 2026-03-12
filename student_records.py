@@ -124,20 +124,20 @@ def delete_student(conn):
             print(f"Student ID {student_id} deleted successfully!")
     except sqlite3.Error as e:
         print(f"Database error: {e}")
-# ---------- Main Menu ----------
 
+# Main Menu
 def main_menu():
     """Display the main menu and handle user navigation."""
     conn = connect_db()
 
     while True:
-        print("\n===== Student Record Manager =====")
+        print("\n---- Student Record Manager ----")
         print("1. Add a new student record")
         print("2. View all student records")
         print("3. Update a student record")
         print("4. Delete a student record")
         print("5. Exit")
-        print("==================================")
+        print("==================================\n")
 
         choice = input("Enter your choice (1-5): ").strip()
 
